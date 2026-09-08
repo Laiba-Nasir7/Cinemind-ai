@@ -800,7 +800,7 @@ function renderCastingDirector(casting) {
 
         return `
             <div class="col-md-6 col-lg-4">
-                <div class="card bg-dark border-secondary border-opacity-25 rounded-3 p-3 h-100 d-flex flex-column justify-content-between">
+                <div class="card bg-dark border-secondary border-opacity-25 rounded-3 p-3 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden">
                     <div>
                         <!-- Character Header -->
                         <div class="d-flex align-items-center justify-content-between mb-2">
