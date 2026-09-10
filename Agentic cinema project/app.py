@@ -430,7 +430,7 @@ def get_grafana_metrics():
             "token_consumption_rate_per_sec": 48.2,
             "agent_consensus_score_pct": 96.4,
             "budget_variance_pct": 3.8,
-            "host_environment": "Replit Cloud Container",
+            "host_environment": "Production Cloud Container",
             "health_status": "OPTIMAL"
         },
         "grafana_dashboard_compatible": True
