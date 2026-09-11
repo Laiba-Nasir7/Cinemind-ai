@@ -1,452 +1,596 @@
 /* ==========================================================================
-   CineMind AI - Dark Obsidian Cinematic UI Design System
+   CineMind AI 2.5 - Professional Film Studio Design System
+   Aesthetic: Clean, High-Contrast Studio Interface (Apple/Linear Enterprise SaaS)
    ========================================================================== */
 
-:root {
-    --bg-dark: #090D16;
-    --bg-card: #0F172A;
-    --bg-card-hover: #1E293B;
-    --cyan-glow: #00F2FE;
-    --cyan-accent: #38BDF8;
-    --amber-glow: #FFAB00;
-    --magenta-glow: #FF007F;
-    --text-main: #F8FAFC;
+/* --------------------------------------------------------------------------
+   1. Design Tokens & CSS Custom Properties (Dark / Light Studio Theming)
+   -------------------------------------------------------------------------- */
+:root,
+[data-theme="dark"] {
+    --theme-name: "dark";
+    
+    /* Backgrounds: Clean deep slate canvas */
+    --bg-app: #0D1117;
+    --card-bg: #161B22;
+    --bg-surface: #161B22;
+    --bg-surface-elevated: #21262D;
+    --bg-surface-subtle: #1F242C;
+    --bg-input: #0B0E14;
+    
+    /* Typography: High-Contrast Light Colors in Dark Mode */
+    --text-primary: #FFFFFF;
+    --text-secondary: #CBD5E1;
     --text-muted: #94A3B8;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    --text-inverse: #0D1117;
+    --label-color: #E2E8F0;
+    --placeholder-color: #64748B;
+
+    /* Crisp 1px Borders */
+    --border: rgba(240, 246, 252, 0.16);
+    --border-medium: rgba(240, 246, 252, 0.26);
+    --border-subtle: rgba(240, 246, 252, 0.1);
+    
+    /* Soft Cyan Brand Accent */
+    --accent-cyan: #0EA5E9;
+    --accent-cyan-hover: #38BDF8;
+    --accent-cyan-subtle: rgba(14, 165, 233, 0.18);
+    --accent-cyan-border: rgba(14, 165, 233, 0.45);
+    
+    /* Semantic Status Indicators */
+    --color-warning: #F59E0B;
+    --color-warning-subtle: rgba(245, 158, 11, 0.18);
+    --color-success: #10B981;
+    --color-success-subtle: rgba(16, 185, 129, 0.18);
+    --color-danger: #EF4444;
+    --color-danger-subtle: rgba(239, 68, 68, 0.18);
+    --color-info: #38BDF8;
+    --color-info-subtle: rgba(56, 189, 248, 0.18);
+    
+    /* Subtle Shadows */
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 14px 0 rgba(0, 0, 0, 0.5);
+
+    /* Navbar Backdrop */
+    --navbar-bg: rgba(13, 17, 23, 0.94);
+    
+    /* Developer Telemetry Console */
+    --console-bg: #07090D;
+    --console-border: rgba(240, 246, 252, 0.16);
+    --console-text: #F1F5F9;
+
+    /* Chart Elements */
+    --chart-grid: rgba(240, 246, 252, 0.09);
+    --chart-tick: #CBD5E1;
 }
 
-body {
-    background-color: var(--bg-dark) !important;
-    color: var(--text-main) !important;
-    font-family: var(--font-sans);
+[data-theme="light"] {
+    --theme-name: "light";
+    
+    /* Backgrounds: Crisp enterprise slate canvas */
+    --bg-app: #F6F8FA;
+    --card-bg: #FFFFFF;
+    --bg-surface: #FFFFFF;
+    --bg-surface-elevated: #F1F5F9;
+    --bg-surface-subtle: #E2E8F0;
+    --bg-input: #FFFFFF;
+    
+    /* Typography: High-Contrast Dark Charcoal in Light Mode */
+    --text-primary: #0F172A;
+    --text-secondary: #334155;
+    --text-muted: #64748B;
+    --text-inverse: #FFFFFF;
+    --label-color: #0F172A;
+    --placeholder-color: #94A3B8;
+
+    /* Crisp 1px Borders */
+    --border: rgba(15, 23, 42, 0.14);
+    --border-medium: rgba(15, 23, 42, 0.24);
+    --border-subtle: rgba(15, 23, 42, 0.08);
+    
+    /* Soft Cyan Brand Accent */
+    --accent-cyan: #0284C7;
+    --accent-cyan-hover: #0369A1;
+    --accent-cyan-subtle: rgba(2, 132, 199, 0.12);
+    --accent-cyan-border: rgba(2, 132, 199, 0.4);
+    
+    /* Semantic Status Indicators */
+    --color-warning: #D97706;
+    --color-warning-subtle: rgba(217, 119, 6, 0.14);
+    --color-success: #059669;
+    --color-success-subtle: rgba(5, 150, 105, 0.14);
+    --color-danger: #DC2626;
+    --color-danger-subtle: rgba(220, 38, 38, 0.14);
+    --color-info: #0284C7;
+    --color-info-subtle: rgba(2, 132, 199, 0.14);
+    
+    /* Subtle Shadows */
+    --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08);
+    --shadow-md: 0 4px 12px 0 rgba(15, 23, 42, 0.12);
+
+    /* Navbar Backdrop */
+    --navbar-bg: rgba(246, 248, 250, 0.94);
+    
+    /* Developer Telemetry Console */
+    --console-bg: #F1F5F9;
+    --console-border: rgba(15, 23, 42, 0.14);
+    --console-text: #0F172A;
+
+    /* Chart Elements */
+    --chart-grid: rgba(15, 23, 42, 0.09);
+    --chart-tick: #475569;
+}
+
+/* --------------------------------------------------------------------------
+   2. Base & Typography
+   -------------------------------------------------------------------------- */
+body.app-body {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     min-height: 100vh;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.font-mono {
+    font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+.text-cyan { color: var(--accent-cyan) !important; }
+.text-primary-themed { color: var(--text-primary) !important; }
+.text-secondary-themed { color: var(--text-secondary) !important; }
+.text-muted { color: var(--text-muted) !important; }
+.text-warning { color: var(--color-warning) !important; }
+.text-success { color: var(--color-success) !important; }
+.text-danger { color: var(--color-danger) !important; }
+.text-info { color: var(--color-info) !important; }
+
+.text-xxs { font-size: 0.7rem !important; }
+.text-xs { font-size: 0.78rem !important; }
+.text-sm { font-size: 0.86rem !important; }
+
+/* --------------------------------------------------------------------------
+   3. Navbar & Dedicated Theme Toggle Pill
+   -------------------------------------------------------------------------- */
+.navbar-glass {
+    background: var(--navbar-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-color: var(--border) !important;
+    z-index: 1020;
+}
+
+.brand-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-cyan-subtle);
+    border: 1px solid var(--accent-cyan-border);
+    border-radius: 6px;
+}
+
+.badge-cyber {
+    background: var(--accent-cyan-subtle);
+    color: var(--accent-cyan);
+    border: 1px solid var(--accent-cyan-border);
+    font-size: 0.65rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+}
+
+.api-status-badge {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border);
+}
+
+.pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Dedicated Prominent Theme Toggle Button */
+.theme-toggle-btn {
+    background: var(--bg-surface-elevated) !important;
+    border: 1px solid var(--border-medium) !important;
+    color: var(--text-primary) !important;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+}
+
+.theme-toggle-btn:hover {
+    border-color: var(--accent-cyan) !important;
+    background: var(--accent-cyan-subtle) !important;
+    color: var(--accent-cyan) !important;
+    transform: translateY(-1px);
+}
+
+.theme-toggle-btn:active {
+    transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   4. Hero & Studio Card Containers
+   -------------------------------------------------------------------------- */
+.hero-card {
+    background: var(--card-bg);
+    border-color: var(--border) !important;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-title {
+    color: var(--text-primary) !important;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.hero-desc {
+    color: var(--text-secondary) !important;
+}
+
+.card.bg-card {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border) !important;
+    box-shadow: var(--shadow-sm);
+}
+
+.bg-surface-elevated {
+    background-color: var(--bg-surface-elevated) !important;
+    border-color: var(--border) !important;
+}
+
+.border {
+    border-color: var(--border) !important;
+}
+
+.border-bottom {
+    border-color: var(--border) !important;
+}
+
+/* High-Contrast Form Labels */
+.form-label {
+    color: var(--label-color) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em;
+}
+
+/* Form Controls */
+.form-control,
+.form-select {
+    background-color: var(--bg-input) !important;
+    border: 1px solid var(--border-medium) !important;
+    color: var(--text-primary) !important;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 2px var(--accent-cyan-subtle) !important;
+    outline: none;
+    color: var(--text-primary) !important;
+}
+
+.form-control::placeholder {
+    color: var(--placeholder-color) !important;
+}
+
+/* Upload Zone */
+.upload-zone {
+    background: var(--bg-surface-elevated);
+    border: 1px dashed var(--border-medium) !important;
+    transition: all 0.2s ease;
+}
+
+.upload-zone:hover {
+    border-color: var(--accent-cyan) !important;
+    background: var(--accent-cyan-subtle);
+}
+
+/* Script Doctor Chips */
+.doctor-chip {
+    background: var(--bg-surface-elevated);
+    color: var(--text-primary) !important;
+    border-color: var(--border-medium) !important;
+    font-size: 0.72rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.doctor-chip:hover {
+    background: var(--accent-cyan-subtle);
+    color: var(--accent-cyan) !important;
+    border-color: var(--accent-cyan-border) !important;
+}
+
+/* Primary CTA Button: RUN AUTONOMOUS ENGINE */
+.btn-run-engine,
+.btn-primary {
+    background-color: var(--accent-cyan) !important;
+    border-color: var(--accent-cyan) !important;
+    color: #FFFFFF !important;
+    border-radius: 6px;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-run-engine:hover,
+.btn-primary:hover {
+    background-color: var(--accent-cyan-hover) !important;
+    border-color: var(--accent-cyan-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--accent-cyan-subtle);
+}
+
+.btn-run-engine:active,
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-outline-cyan {
+    background: transparent;
+    color: var(--accent-cyan) !important;
+    border: 1px solid var(--accent-cyan-border) !important;
+    border-radius: 6px;
+}
+
+.btn-outline-cyan:hover {
+    background: var(--accent-cyan-subtle);
+    border-color: var(--accent-cyan) !important;
+    color: var(--accent-cyan) !important;
+}
+
+.btn-outline-secondary {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-medium) !important;
+    color: var(--text-secondary) !important;
+    border-radius: 6px;
+}
+
+.btn-outline-secondary:hover {
+    background: var(--bg-surface-subtle);
+    border-color: var(--accent-cyan) !important;
+    color: var(--text-primary) !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Sleek Horizontal 7-Step Progress Stepper (.pipeline-stepper)
+   -------------------------------------------------------------------------- */
+.pipeline-stepper {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.pipeline-stepper .progress {
+    background-color: var(--bg-surface-subtle);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.pipeline-stepper .progress-bar {
+    background-color: var(--accent-cyan);
+    transition: width 0.35s ease-in-out;
+}
+
+.stepper-steps {
+    margin-top: 0.5rem;
+}
+
+.step-item {
+    padding: 0.35rem 0.25rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.step-item .step-badge {
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+.step-item .step-num {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--bg-surface-subtle);
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    margin-right: 2px;
+}
+
+.step-item .step-status {
+    display: block;
+    font-size: 0.66rem;
+    opacity: 0.85;
+}
+
+/* Active Running Step: Soft cyan background (#0EA5E9) */
+.step-item.active {
+    background-color: #0EA5E9 !important;
+    border-color: #0EA5E9 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4);
+}
+
+.step-item.active .step-num {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: #FFFFFF !important;
+}
+
+.step-item.active .step-status {
+    color: #FFFFFF !important;
+    opacity: 1;
+    font-weight: 700;
+}
+
+/* Completed Step: Subtle green border/text */
+.step-item.completed {
+    border-color: var(--color-success) !important;
+    color: var(--color-success) !important;
+    background-color: var(--color-success-subtle) !important;
+}
+
+.step-item.completed .step-num {
+    background: var(--color-success) !important;
+    color: #FFFFFF !important;
+}
+
+.step-item.completed .step-status {
+    color: var(--color-success) !important;
+    opacity: 0.95;
+}
+
+/* --------------------------------------------------------------------------
+   6. Live Log Console (Capped Height ~260px-280px)
+   -------------------------------------------------------------------------- */
+.terminal-box {
+    background: var(--console-bg);
+    border: 1px solid var(--console-border);
+    max-height: 270px;
+    height: 270px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
 }
 
-/* Typography Utilities */
-.font-mono {
-    font-family: var(--font-mono) !important;
+.terminal-header {
+    border-color: var(--border) !important;
 }
 
-.tracking-tight {
-    letter-spacing: -0.03em;
-}
-
-.tracking-wide {
-    letter-spacing: 0.05em;
-}
-
-.text-xs {
-    font-size: 0.75rem;
-}
-
-.text-sm {
-    font-size: 0.875rem;
-}
-
-.text-cyan {
-    color: var(--cyan-glow) !important;
-}
-
-.text-amber {
-    color: var(--amber-glow) !important;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-}
-
-/* Glassmorphism Navbar */
-.navbar-glass {
-    background: rgba(9, 13, 22, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-}
-
-.brand-icon {
-    width: 38px;
-    height: 38px;
-    background: rgba(0, 242, 254, 0.1);
-    border: 1px solid rgba(0, 242, 254, 0.3);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Pulse Dot Indicator */
-.pulse-dot {
-    width: 8px;
-    height: 8px;
+.terminal-dot {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    animation: pulse 1.8s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    }
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
-    }
-    100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-    }
-}
-
-/* Hero Card */
-.hero-card {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.6) 100%);
-    backdrop-filter: blur(12px);
-}
-
-.hero-glow {
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-    pointer-events: none;
-}
-
-/* Cards & Containers */
-.bg-card {
-    background-color: var(--bg-card) !important;
-}
-
-.upload-zone {
-    background: rgba(15, 23, 42, 0.5);
-    border: 2px dashed rgba(255, 255, 255, 0.15);
-    transition: all 0.25s ease;
-}
-
-.upload-zone:hover {
-    border-color: var(--cyan-glow);
-    background: rgba(0, 242, 254, 0.05);
-}
-
-.script-textarea {
-    resize: none;
-    background-color: rgba(9, 13, 22, 0.8) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-    font-size: 0.85rem;
-    line-height: 1.6;
-}
-
-.script-textarea:focus {
-    border-color: var(--cyan-glow) !important;
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.2) !important;
-}
-
-/* Buttons */
-.btn-cyan {
-    background-color: var(--cyan-glow);
-    color: #000;
-    border: none;
-    transition: all 0.25s ease;
-}
-
-.btn-cyan:hover {
-    background-color: #38BDF8;
-    color: #000;
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-}
-
-.btn-outline-cyan {
-    border-color: var(--cyan-glow);
-    color: var(--cyan-glow);
-}
-
-.btn-outline-cyan:hover {
-    background-color: var(--cyan-glow);
-    color: #000;
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
-}
-
-.btn-gradient-cyan {
-    background: linear-gradient(135deg, #00F2FE 0%, #0099FF 100%);
-    color: #000;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-.btn-gradient-cyan:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 242, 254, 0.4);
-    color: #000;
-}
-
-/* Stepper Component */
-.stepper-wrapper {
-    padding: 10px 0;
-}
-
-.step-item {
-    color: var(--text-muted);
-    transition: all 0.3s ease;
-}
-
-.step-item .step-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 6px auto;
-    font-size: 0.8rem;
-    transition: all 0.3s ease;
-}
-
-.step-item.active {
-    color: var(--cyan-glow);
-}
-
-.step-item.active .step-icon {
-    background: rgba(0, 242, 254, 0.2);
-    border-color: var(--cyan-glow);
-    color: var(--cyan-glow);
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
-}
-
-.step-item.completed {
-    color: #22C55E;
-}
-
-.step-item.completed .step-icon {
-    background: rgba(34, 197, 94, 0.2);
-    border-color: #22C55E;
-    color: #22C55E;
-}
-
-/* Terminal Log Console */
-.terminal-box {
-    background-color: #05080E;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    background: var(--accent-cyan);
+    display: inline-block;
 }
 
 .terminal-logs {
-    max-height: 280px;
-    font-size: 0.8rem;
-    line-height: 1.6;
+    font-size: 0.78rem;
+    color: var(--console-text);
+    overflow-y: auto;
+    flex: 1;
 }
 
 .log-line {
-    margin-bottom: 4px;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     word-break: break-word;
 }
 
-.log-line.init { color: var(--cyan-accent); }
-.log-line.agent_start { color: var(--amber-glow); }
-.log-line.agent_complete { color: #22C55E; }
-.log-line.pipeline_complete { color: #38BDF8; font-weight: bold; }
+/* --------------------------------------------------------------------------
+   7. Studio Pre-Production Bible Results Section
+   -------------------------------------------------------------------------- */
+.metric-card {
+    background: var(--card-bg);
+    border-color: var(--border) !important;
+    box-shadow: var(--shadow-sm);
+}
 
-/* Custom Pills Nav */
 .custom-tabs .nav-link {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-muted);
-    border-radius: 12px;
-    padding: 10px 18px;
-    font-size: 0.875rem;
-    transition: all 0.25s ease;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    padding: 0.4rem 0.85rem;
+    transition: all 0.15s ease;
 }
 
 .custom-tabs .nav-link:hover {
-    color: var(--text-main);
-    background: rgba(30, 41, 59, 0.8);
+    color: var(--text-primary);
+    border-color: var(--border-medium);
 }
 
 .custom-tabs .nav-link.active {
-    background: var(--cyan-glow);
-    color: #000;
-    font-weight: 700;
-    border-color: var(--cyan-glow);
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    background: var(--accent-cyan) !important;
+    color: #FFFFFF !important;
+    border-color: var(--accent-cyan) !important;
 }
 
-/* Metric Cards */
-.metric-card {
-    transition: transform 0.2s ease, border-color 0.2s ease;
+/* Tables */
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-primary);
+    border-color: var(--border) !important;
 }
 
-.metric-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--cyan-glow) !important;
+.table > :not(caption) > * > * {
+    background-color: transparent !important;
+    color: var(--text-primary);
+    border-color: var(--border) !important;
+    padding: 0.6rem 0.75rem;
 }
 
-/* Storyboard Card Frame */
-.storyboard-frame {
-    background-color: #0B0F17;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.25s ease;
-}
-
-.storyboard-frame:hover {
-    border-color: var(--cyan-glow);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-}
-
+/* Storyboard aspect ratio scope preview */
 .storyboard-preview-canvas {
-    height: 180px;
-    background: linear-gradient(135deg, #090D16 0%, #1A2332 100%);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #000000;
+    transition: aspect-ratio 0.25s ease;
 }
 
-/* Scrollbar Customization */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
+.ratio-scope { aspect-ratio: 2.39 / 1; }
+.ratio-flat { aspect-ratio: 1.85 / 1; }
+.ratio-imax { aspect-ratio: 1.43 / 1; }
+.ratio-academy { aspect-ratio: 1.33 / 1; }
 
-::-webkit-scrollbar-track {
-    background: rgba(9, 13, 22, 0.5);
-}
+.filter-teal-orange { filter: contrast(1.15) saturate(1.3) hue-rotate(-10deg); }
+.filter-noir { filter: grayscale(1) contrast(1.3); }
+.filter-bleach-bypass { filter: contrast(1.4) saturate(0.6); }
 
-::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--cyan-glow);
-}
-
-/* Script Doctor Chip Styles */
-.doctor-chip {
-    transition: all 0.2s ease;
-    user-select: none;
-}
-
-.doctor-chip:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
-    filter: brightness(1.2);
-}
-
-.text-xxs {
-    font-size: 0.65rem;
-}
-
-/* Printable PDF Styles */
-@media print {
-    body {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-    }
-    .navbar-glass, .hero-card, .stepper-wrapper, .terminal-box, button, input, .dropdown {
-        display: none !important;
-    }
-    .card {
-        border: 1px solid #ddd !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-    }
-}
-
-/* ==========================================================================
-   Director's Lens & Aspect Ratio Filters
-   ========================================================================== */
-.storyboard-preview-canvas {
-    transition: all 0.3s ease;
-}
-
-.ratio-scope {
-    aspect-ratio: 2.39 / 1;
-    height: auto !important;
-    max-height: 160px;
-}
-
-.ratio-flat {
-    aspect-ratio: 1.85 / 1;
-    height: auto !important;
-    max-height: 180px;
-}
-
-.ratio-imax {
-    aspect-ratio: 1.43 / 1;
-    height: auto !important;
-    max-height: 220px;
-}
-
-.ratio-academy {
-    aspect-ratio: 1.33 / 1;
-    height: auto !important;
-    max-height: 220px;
-}
-
-.filter-teal-orange {
-    filter: contrast(1.25) saturate(1.4) hue-rotate(15deg) sepia(0.2) drop-shadow(0 0 6px rgba(0, 242, 254, 0.4));
-}
-
-.filter-technicolor {
-    filter: saturate(1.8) contrast(1.3) brightness(1.05);
-}
-
-.filter-bleach-bypass {
-    filter: contrast(1.6) saturate(0.4) brightness(0.9);
-}
-
-.filter-noir {
-    filter: grayscale(100%) contrast(1.5) brightness(0.85);
-}
-
-/* ==========================================================================
-   Studio Greenlight War Room Debate Styles
-   ========================================================================== */
+/* War Room Debate Bubbles */
 .debate-bubble-director {
-    background: rgba(0, 242, 254, 0.08);
-    border: 1px solid rgba(0, 242, 254, 0.3);
-    border-left: 4px solid var(--cyan-glow);
-    border-radius: 12px;
+    background: var(--bg-surface-elevated);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 6px;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
 .debate-bubble-producer {
-    background: rgba(239, 68, 68, 0.08);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-left: 4px solid #EF4444;
-    border-radius: 12px;
+    background: var(--bg-surface-elevated);
+    border-left: 3px solid var(--color-danger);
+    border-radius: 6px;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
-/* ==========================================================================
-   AI Casting Director Styles
-   ========================================================================== */
-.bg-cyan-subtle {
-    background-color: rgba(0, 242, 254, 0.12) !important;
+/* Dropdown Menus */
+.dropdown-menu {
+    background: var(--card-bg);
+    border: 1px solid var(--border-medium);
+    color: var(--text-primary);
 }
 
-.text-xxs {
-    font-size: 0.68rem;
+.dropdown-item {
+    color: var(--text-primary);
 }
 
-/* ==========================================================================
-   Script DNA & Emotional Arc Styles
-   ========================================================================== */
-.dna-tension-point {
-    position: relative;
-    transition: transform 0.2s ease;
+.dropdown-item:hover {
+    background: var(--bg-surface-elevated);
+    color: var(--accent-cyan);
 }
 
-.dna-tension-point:hover {
-    transform: translateY(-2px);
-}
-
-
-
+/* Scrollbars */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }

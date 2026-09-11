@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineMind AI | Autonomous Pre-Production & Script Intelligence Engine</title>
-    <meta name="description" content="Autonomous Multi-Agent AI Pre-Production & Script Intelligence Engine powered by Google Gemini 2.5 Structured Outputs.">
+    <title>CineMind AI 2.5 | Autonomous Pre-Production &amp; Script Intelligence Engine</title>
+    <meta name="description" content="Autonomous Multi-Agent AI Pre-Production &amp; Script Intelligence Engine powered by Google Gemini 2.5 Structured Outputs.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Bootstrap 5 CSS & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,42 +20,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.5">
 </head>
-<body class="bg-dark text-light">
+<body class="app-body">
 
     <!-- Top Navigation Header -->
-    <nav class="navbar navbar-expand-lg border-bottom border-secondary border-opacity-25 py-3 sticky-top navbar-glass">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+    <nav class="navbar navbar-expand-lg border-bottom py-2 sticky-top navbar-glass">
+        <div class="container-fluid px-4 d-flex align-items-center justify-content-between">
+            <a class="navbar-brand d-flex align-items-center gap-2 m-0 text-decoration-none" href="#">
                 <div class="brand-icon">
                     <i class="fa-solid fa-clapperboard text-cyan"></i>
                 </div>
-                <span class="fw-bold fs-4 tracking-tight">Cine<span class="text-cyan">Mind</span> <span class="badge badge-cyber fs-6 font-mono">AI 2.5</span></span>
+                <span class="fw-bold fs-5 tracking-tight text-primary-themed">Cine<span class="text-cyan">Mind</span> <span class="badge badge-cyber font-mono">AI 2.5</span></span>
             </a>
 
-            <div class="d-flex align-items-center gap-3 ms-auto">
+            <div class="d-flex align-items-center gap-2 ms-auto">
                 <!-- API Key Status Badge -->
-                <div class="api-status-badge d-flex align-items-center gap-2 px-3 py-1 text-xs rounded-pill" id="apiStatusContainer">
+                <div class="api-status-badge d-flex align-items-center gap-2 px-2 py-1 rounded-pill" id="apiStatusContainer">
                     {% if has_api_key %}
                         <span class="pulse-dot bg-success"></span>
-                        <span class="text-success-emphasis font-mono">Gemini API Connected</span>
+                        <span class="font-mono text-success text-xs fw-semibold">Gemini Connected</span>
                     {% else %}
                         <span class="pulse-dot bg-warning"></span>
-                        <span class="text-warning-emphasis font-mono">Demo Mode (Keyless Ready)</span>
+                        <span class="font-mono text-warning text-xs fw-semibold">Demo Mode</span>
                     {% endif %}
                 </div>
 
+                <!-- Dedicated Prominent Theme Toggle Button -->
+                <button id="themeToggleBtn" class="theme-toggle-btn d-flex align-items-center gap-2 px-3 py-1 rounded-pill" title="Toggle Light / Dark Theme" type="button" aria-label="Toggle Theme">
+                    <span id="themeIcon" class="fs-6">🌙</span>
+                    <span id="themeLabel" class="font-mono text-xxs fw-bold">DARK</span>
+                </button>
+
                 <!-- Model Selector -->
                 <div class="model-select-wrapper">
-                    <select class="form-select form-select-sm bg-dark text-light border-secondary font-mono" id="modelSelector">
-                        <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash (Ultra Fast)</option>
-                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (Deep Reasoning)</option>
+                    <select class="form-select form-select-sm font-mono" id="modelSelector">
+                        <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
                     </select>
                 </div>
 
-                <!-- Cloud Deployment Badge -->
-                <span class="badge bg-secondary-subtle text-cyan border border-cyan border-opacity-25 font-mono d-none d-md-inline-block">
+                <!-- Production Ready Badge -->
+                <span class="badge bg-secondary-subtle text-cyan border border-cyan border-opacity-25 font-mono d-none d-lg-inline-block px-2 py-1 text-xs">
                     <i class="fa-solid fa-cloud-bolt me-1"></i> Production Ready
                 </span>
             </div>
@@ -63,31 +69,30 @@
     </nav>
 
     <!-- Main Workspace Container -->
-    <main class="container-fluid px-4 py-4">
+    <main class="container-fluid px-4 py-3">
 
-        <!-- Hero Title Banner -->
-        <div class="row mb-4">
+        <!-- Hero Title Banner (Reduced vertical padding by ~40%) -->
+        <div class="row mb-3">
             <div class="col-12">
-                <div class="hero-card p-4 rounded-4 position-relative overflow-hidden border border-secondary border-opacity-25">
-                    <div class="hero-glow"></div>
-                    <div class="row align-items-center">
+                <div class="hero-card p-3 rounded-3 position-relative overflow-hidden border">
+                    <div class="row align-items-center g-3">
                         <div class="col-lg-8">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <span class="badge bg-cyan text-dark font-mono font-bold">HACKATHON EDITION</span>
-                                <span class="text-muted text-sm"><i class="fa-solid fa-bolt text-warning"></i> Multi-Agent Pre-Production Studio</span>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-cyan text-dark font-mono font-bold text-xxs">HACKATHON EDITION</span>
+                                <span class="text-secondary-themed text-xs fw-semibold"><i class="fa-solid fa-bolt text-warning me-1"></i> Autonomous Multi-Agent Pre-Production Studio</span>
                             </div>
-                            <h1 class="display-6 fw-extrabold text-white mb-2">Autonomous Script Intelligence & Pre-Production Engine</h1>
-                            <p class="text-muted mb-0 lead-sm">
+                            <h1 class="hero-title mb-1 fs-4 fw-bold">Autonomous Script Intelligence &amp; Pre-Production Engine</h1>
+                            <p class="hero-desc mb-0 text-xs text-secondary-themed">
                                 Transform raw film screenplays into complete studio bibles, scene breakdowns, financial budget forecasts, visual storyboards, and executive pitch decks in seconds.
                             </p>
                         </div>
-                        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                        <div class="col-lg-4 text-lg-end">
                             <!-- 1-Click Quick Preset Selector -->
                             <div class="dropdown">
-                                <button class="btn btn-outline-cyan dropdown-toggle w-100 py-2 fw-semibold" type="button" id="presetDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-outline-cyan dropdown-toggle w-100 py-2 fw-semibold text-xs font-mono" type="button" id="presetDropdown" name="presetDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fa-solid fa-film me-2"></i> Load Preset Screenplay...
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg" id="presetMenuList">
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg" id="presetMenuList">
                                     <li><h6 class="dropdown-header">1-Click Hackathon Presets</h6></li>
                                     <!-- Dynamic Presets Loaded by JS -->
                                 </ul>
@@ -99,28 +104,28 @@
         </div>
 
         <!-- Input & Execution Section -->
-        <div class="row g-4 mb-4">
+        <div class="row g-3 mb-4">
             <!-- Left Side: Screenplay Input -->
             <div class="col-lg-5">
-                <div class="card bg-card border-secondary border-opacity-25 rounded-4 h-100 shadow-sm">
-                    <div class="card-header bg-transparent border-bottom border-secondary border-opacity-25 d-flex align-items-center justify-content-between py-3">
-                        <h5 class="card-title mb-0 d-flex align-items-center gap-2 text-white">
-                            <i class="fa-solid fa-file-lines text-cyan"></i> Screenplay Input
-                        </h5>
-                        <div class="badge bg-dark border border-secondary text-muted font-mono" id="scriptStatsBadge">0 Scenes</div>
+                <div class="card bg-card border rounded-3 h-100 shadow-sm">
+                    <div class="card-header bg-transparent d-flex align-items-center justify-content-between py-2 px-3 border-bottom">
+                        <h6 class="card-title mb-0 d-flex align-items-center gap-2 text-primary-themed font-mono fw-bold">
+                            <i class="fa-solid fa-file-lines text-cyan"></i> SCREENPLAY INPUT
+                        </h6>
+                        <div class="badge bg-surface-elevated border text-primary-themed font-mono text-xxs" id="scriptStatsBadge">0 Scenes</div>
                     </div>
-                    <div class="card-body d-flex flex-column gap-3">
+                    <div class="card-body p-3 d-flex flex-column gap-2">
                         <!-- Project Title Input -->
                         <div>
-                            <label class="form-label text-sm text-muted font-mono">PROJECT TITLE</label>
-                            <input type="text" class="form-control bg-dark border-secondary text-light font-mono" id="scriptTitleInput" placeholder="e.g. Neon Horizon 2099">
+                            <label class="form-label text-xxs font-mono mb-1">PROJECT TITLE</label>
+                            <input type="text" class="form-control form-control-sm font-mono" id="scriptTitleInput" name="projectTitle" placeholder="e.g. Neon Horizon 2099">
                         </div>
 
                         <!-- Visual Style & Script Doctor Controls -->
                         <div class="row g-2">
                             <div class="col-md-6">
-                                <label class="form-label text-xs text-muted font-mono">VISUAL STYLE AESTHETIC</label>
-                                <select class="form-select form-select-sm bg-dark border-secondary text-light font-mono" id="visualStyleSelector">
+                                <label class="form-label text-xxs font-mono mb-1">VISUAL STYLE AESTHETIC</label>
+                                <select class="form-select form-select-sm font-mono" id="visualStyleSelector" name="visualStyle">
                                     <option value="Cyberpunk Neo-Noir" selected>🌆 Cyberpunk Neo-Noir</option>
                                     <option value="Vintage Film Noir">🕵️ Vintage Film Noir (35mm)</option>
                                     <option value="Watercolor / Conceptual Art">🎨 Impressionistic Watercolor</option>
@@ -129,41 +134,39 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-xs text-muted font-mono d-flex justify-content-between">
-                                    <span>SCRIPT DOCTOR PROMPT</span>
-                                </label>
-                                <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light font-mono" id="scriptDoctorInput" placeholder="e.g. Make it more suspenseful...">
+                                <label class="form-label text-xxs font-mono mb-1">SCRIPT DOCTOR PROMPT</label>
+                                <input type="text" class="form-control form-control-sm font-mono" id="scriptDoctorInput" placeholder="e.g. Make it more suspenseful...">
                             </div>
                         </div>
 
                         <!-- Quick Script Doctor Preset Chips -->
-                        <div class="d-flex flex-wrap gap-1 align-items-center text-xs font-mono">
-                            <span class="text-muted text-xxs">DOCTOR CHIPS:</span>
-                            <span class="badge bg-dark border border-cyan-subtle text-cyan cursor-pointer doctor-chip" onclick="applyDoctorPreset('🔥 High Suspense & Thriller Tone')">🔥 Suspense</span>
-                            <span class="badge bg-dark border border-warning-subtle text-warning cursor-pointer doctor-chip" onclick="applyDoctorPreset('📉 Micro Budget Scale')">📉 Micro Budget</span>
-                            <span class="badge bg-dark border border-info-subtle text-info cursor-pointer doctor-chip" onclick="applyDoctorPreset('🚀 High-Tech Sci-Fi Vibe')">🚀 Sci-Fi Action</span>
-                            <span class="badge bg-dark border border-secondary text-light cursor-pointer doctor-chip" onclick="applyDoctorPreset('🎭 Festival Indie Drama')">🎭 Indie Tone</span>
+                        <div class="d-flex flex-wrap gap-1 align-items-center text-xs font-mono my-1">
+                            <span class="text-secondary-themed text-xxs fw-bold">DOCTOR CHIPS:</span>
+                            <span class="badge border cursor-pointer doctor-chip" onclick="applyDoctorPreset('🔥 High Suspense & Thriller Tone')">🔥 Suspense</span>
+                            <span class="badge border cursor-pointer doctor-chip" onclick="applyDoctorPreset('📉 Micro Budget Scale')">📉 Micro Budget</span>
+                            <span class="badge border cursor-pointer doctor-chip" onclick="applyDoctorPreset('🚀 High-Tech Sci-Fi Vibe')">🚀 Sci-Fi Action</span>
+                            <span class="badge border cursor-pointer doctor-chip" onclick="applyDoctorPreset('🎭 Festival Indie Drama')">🎭 Indie Tone</span>
                         </div>
 
                         <!-- Drag and Drop Upload Zone -->
-                        <div class="upload-zone rounded-3 p-3 text-center border-dashed position-relative" id="dropZone">
+                        <div class="upload-zone rounded-3 p-2 text-center border-dashed position-relative" id="dropZone">
                             <input type="file" id="fileInput" accept=".txt,.pdf,.docx" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer">
-                            <i class="fa-solid fa-cloud-arrow-up fs-2 text-cyan mb-2"></i>
-                            <div class="text-sm fw-semibold">Drag & drop screenplay (.txt, .pdf, .docx)</div>
-                            <div class="text-xs text-muted">or click to browse your computer</div>
+                            <i class="fa-solid fa-cloud-arrow-up fs-4 text-cyan mb-1"></i>
+                            <div class="text-xs fw-semibold text-primary-themed">Drag &amp; drop screenplay (.txt, .pdf, .docx)</div>
+                            <div class="text-xxs text-secondary-themed">or click to browse from device</div>
                         </div>
 
-                        <!-- Raw Text Editor -->
+                        <!-- Screenplay Textarea Editor -->
                         <div class="flex-grow-1 d-flex flex-column">
-                            <label class="form-label text-sm text-muted font-mono d-flex justify-content-between">
+                            <label class="form-label text-xxs font-mono d-flex justify-content-between mb-1">
                                 <span>SCREENPLAY TEXT / SCENARIO</span>
-                                <span class="cursor-pointer text-cyan text-xs" id="clearTextBtn"><i class="fa-solid fa-trash-can"></i> Clear</span>
+                                <span class="cursor-pointer text-cyan text-xxs" id="clearTextBtn"><i class="fa-solid fa-trash-can me-1"></i>Clear</span>
                             </label>
-                            <textarea class="form-control bg-dark text-light border-secondary font-mono flex-grow-1 p-3 script-textarea" id="scriptTextarea" rows="8" placeholder="Paste screenplay text here or click 'Load Preset Screenplay' above..."></textarea>
+                            <textarea class="form-control font-mono flex-grow-1 p-2 script-textarea" id="scriptTextarea" name="screenplayText" rows="7" placeholder="Paste screenplay text here or click 'Load Preset Screenplay' above..."></textarea>
                         </div>
 
-                        <!-- Execute Button -->
-                        <button class="btn btn-gradient-cyan btn-lg w-100 py-3 fw-bold tracking-wide shadow-cyan mt-2" id="runPipelineBtn">
+                        <!-- Primary CTA Button -->
+                        <button class="btn btn-primary btn-run-engine w-100 py-2 fw-bold font-mono text-xs tracking-wide shadow-sm mt-1" id="runPipelineBtn" name="runBtn">
                             <i class="fa-solid fa-play me-2"></i> RUN AUTONOMOUS ENGINE
                         </button>
                     </div>
@@ -172,61 +175,64 @@
 
             <!-- Right Side: Real-Time Execution & Multi-Agent Terminal -->
             <div class="col-lg-7">
-                <div class="card bg-card border-secondary border-opacity-25 rounded-4 h-100 shadow-sm d-flex flex-column">
-                    <div class="card-header bg-transparent border-bottom border-secondary border-opacity-25 d-flex align-items-center justify-content-between py-3">
-                        <h5 class="card-title mb-0 d-flex align-items-center gap-2 text-white">
-                            <i class="fa-solid fa-network-wired text-amber"></i> Multi-Agent Orchestration Stream
-                        </h5>
-                        <span class="badge bg-amber-subtle text-amber border border-amber border-opacity-25 font-mono" id="pipelineStatusPill">Idle</span>
+                <div class="card bg-card border rounded-3 h-100 shadow-sm d-flex flex-column">
+                    <div class="card-header bg-transparent d-flex align-items-center justify-content-between py-2 px-3 border-bottom">
+                        <h6 class="card-title mb-0 d-flex align-items-center gap-2 text-primary-themed font-mono fw-bold">
+                            <i class="fa-solid fa-network-wired text-cyan"></i> MULTI-AGENT ORCHESTRATION STREAM
+                        </h6>
+                        <span class="badge font-mono text-xxs" id="pipelineStatusPill">Idle</span>
                     </div>
 
-                    <div class="card-body p-4 d-flex flex-column gap-4">
+                    <div class="card-body p-3 d-flex flex-column gap-3">
 
-                        <!-- Visual Progress Stepper -->
-                        <div class="stepper-wrapper">
-                            <div class="progress progress-dark mb-3" style="height: 8px;">
-                                <div class="progress-bar bg-gradient-cyan progress-bar-striped progress-bar-animated" id="mainProgressBar" role="progressbar" style="width: 0%;"></div>
+                        <!-- Sleek Horizontal 7-Step Progress Stepper (.pipeline-stepper) -->
+                        <div class="pipeline-stepper">
+                            <div class="progress mb-2" style="height: 6px;">
+                                <div class="progress-bar" id="mainProgressBar" role="progressbar" style="width: 0%;"></div>
                             </div>
-                            <div class="row text-center text-xs font-mono g-1">
+                            <div class="stepper-steps row g-1 text-center font-mono">
                                 <div class="col step-item active" id="step-1">
-                                    <div class="step-icon"><i class="fa-solid fa-file-code"></i></div>
-                                    <span>Breakdown</span>
+                                    <div class="step-badge"><span class="step-num">1</span> <span class="step-name">Breakdown</span></div>
+                                    <span class="step-status">Running</span>
                                 </div>
                                 <div class="col step-item" id="step-2">
-                                    <div class="step-icon"><i class="fa-solid fa-coins"></i></div>
-                                    <span>Budget</span>
+                                    <div class="step-badge"><span class="step-num">2</span> <span class="step-name">Budget</span></div>
+                                    <span class="step-status">Queued</span>
                                 </div>
                                 <div class="col step-item" id="step-3">
-                                    <div class="step-icon"><i class="fa-solid fa-palette"></i></div>
-                                    <span>Storyboard</span>
+                                    <div class="step-badge"><span class="step-num">3</span> <span class="step-name">Storyboard</span></div>
+                                    <span class="step-status">Queued</span>
                                 </div>
                                 <div class="col step-item" id="step-4">
-                                    <div class="step-icon"><i class="fa-solid fa-users-viewfinder"></i></div>
-                                    <span>AI Casting</span>
+                                    <div class="step-badge"><span class="step-num">4</span> <span class="step-name">Casting</span></div>
+                                    <span class="step-status">Queued</span>
                                 </div>
                                 <div class="col step-item" id="step-5">
-                                    <div class="step-icon"><i class="fa-solid fa-dna"></i></div>
-                                    <span>Script DNA</span>
+                                    <div class="step-badge"><span class="step-num">5</span> <span class="step-name">Script DNA</span></div>
+                                    <span class="step-status">Queued</span>
                                 </div>
                                 <div class="col step-item" id="step-6">
-                                    <div class="step-icon"><i class="fa-solid fa-handshake-simple"></i></div>
-                                    <span>War Room</span>
+                                    <div class="step-badge"><span class="step-num">6</span> <span class="step-name">War Room</span></div>
+                                    <span class="step-status">Queued</span>
                                 </div>
                                 <div class="col step-item" id="step-7">
-                                    <div class="step-icon"><i class="fa-solid fa-bullhorn"></i></div>
-                                    <span>Pitch Deck</span>
+                                    <div class="step-badge"><span class="step-num">7</span> <span class="step-name">Pitch Deck</span></div>
+                                    <span class="step-status">Queued</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Terminal Execution Log Console -->
-                        <div class="terminal-box rounded-3 p-3 flex-grow-1 d-flex flex-column font-mono position-relative overflow-hidden">
-                            <div class="terminal-header d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom border-secondary border-opacity-25 text-xs text-muted">
-                                <span><i class="fa-solid fa-terminal me-1 text-cyan"></i> LIVE LOG CONSOLE</span>
-                                <span id="terminalTime">00:00:00</span>
+                        <!-- Terminal Execution Log Console (Capped to ~260px-280px) -->
+                        <div class="terminal-box rounded-3 p-3 flex-grow-1 d-flex flex-column font-mono position-relative overflow-hidden" id="liveConsole">
+                            <div class="terminal-header d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom text-xs text-muted">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span class="terminal-dot"></span>
+                                    <i class="fa-solid fa-terminal text-cyan"></i> LIVE LOG CONSOLE
+                                </span>
+                                <span id="terminalTime" class="text-primary-themed">00:00:00</span>
                             </div>
                             <div class="terminal-logs flex-grow-1 overflow-y-auto" id="terminalLogs">
-                                <div class="log-line text-muted">[System] CineMind AI Autonomous Pipeline Ready. Select or paste a screenplay to begin.</div>
+                                <div class="log-line text-secondary-themed">[System] CineMind AI Autonomous Pipeline Ready. Select or paste a screenplay to begin.</div>
                             </div>
                         </div>
 
@@ -239,39 +245,39 @@
         <div class="row d-none" id="resultsSection">
             <div class="col-12">
                 <!-- Action Bar & Export Header -->
-                <div class="card bg-card border-cyan border-opacity-50 rounded-4 mb-4 shadow-lg p-3">
+                <div class="card bg-card border rounded-3 mb-3 p-3 shadow-sm">
                     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                         <div>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-success-subtle text-success border border-success border-opacity-25 font-mono"><i class="fa-solid fa-check"></i> Greenlight Bible Ready</span>
-                                <span class="text-muted text-xs font-mono" id="analysisTimestamp">Generated: just now</span>
+                                <span class="badge bg-success-subtle text-success border border-success border-opacity-25 font-mono"><i class="fa-solid fa-check me-1"></i> Greenlight Bible Ready</span>
+                                <span class="text-secondary-themed text-xs font-mono" id="analysisTimestamp">Generated: just now</span>
                             </div>
-                            <h3 class="fw-bold text-white mb-0 mt-1" id="resScriptTitle">Neon Horizon 2099</h3>
+                            <h3 class="fw-bold text-primary-themed mb-0 mt-1 fs-5" id="resScriptTitle">Neon Horizon 2099</h3>
                         </div>
 
                         <div class="d-flex flex-wrap align-items-center gap-2">
                             <!-- Export PDF -->
-                            <button class="btn btn-cyan font-mono fw-bold px-3 py-2" id="exportPdfBtn">
+                            <button class="btn btn-primary font-mono fw-bold px-3 py-1 text-xs" id="exportPdfBtn">
                                 <i class="fa-solid fa-file-pdf me-2"></i> Export Studio Bible (PDF)
                             </button>
 
                             <!-- Export CSV Dropdown -->
                             <div class="dropdown">
-                                <button class="btn btn-outline-light font-mono px-3 py-2 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <button class="btn btn-outline-secondary font-mono px-3 py-1 text-xs dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                     <i class="fa-solid fa-file-csv me-2"></i> Export CSV...
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li><a class="dropdown-item" href="#" onclick="exportCsv('scenes')"><i class="fa-solid fa-table me-2"></i> Scene Breakdown CSV</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="exportCsv('budget')"><i class="fa-solid fa-dollar-sign me-2"></i> Budget & Costs CSV</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="exportCsv('casting')"><i class="fa-solid fa-users-viewfinder me-2"></i> Casting Sheet CSV</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="exportCsv('dna')"><i class="fa-solid fa-dna me-2"></i> Script DNA Curve CSV</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="exportCsv('risks')"><i class="fa-solid fa-triangle-exclamation me-2"></i> Risk Matrix CSV</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="exportCsv('storyboard')"><i class="fa-solid fa-camera me-2"></i> Storyboard Prompts CSV</a></li>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li><a class="dropdown-item text-xs" href="#" onclick="exportCsv('scenes')"><i class="fa-solid fa-table me-2"></i> Scene Breakdown CSV</a></li>
+                                    <li><a class="dropdown-item text-xs" href="#" onclick="exportCsv('budget')"><i class="fa-solid fa-dollar-sign me-2"></i> Budget &amp; Costs CSV</a></li>
+                                    <li><a class="dropdown-item text-xs" href="#" onclick="exportCsv('casting')"><i class="fa-solid fa-users-viewfinder me-2"></i> Casting Sheet CSV</a></li>
+                                    <li><a class="dropdown-item text-xs" href="#" onclick="exportCsv('dna')"><i class="fa-solid fa-dna me-2"></i> Script DNA Curve CSV</a></li>
+                                    <li><a class="dropdown-item text-xs" href="#" onclick="exportCsv('risks')"><i class="fa-solid fa-triangle-exclamation me-2"></i> Risk Matrix CSV</a></li>
+                                    <li><a class="dropdown-item text-xs" href="#" onclick="exportCsv('storyboard')"><i class="fa-solid fa-camera me-2"></i> Storyboard Prompts CSV</a></li>
                                 </ul>
                             </div>
 
                             <!-- JSON Export -->
-                            <button class="btn btn-outline-secondary font-mono px-3 py-2" id="exportJsonBtn">
+                            <button class="btn btn-outline-secondary font-mono px-3 py-1 text-xs" id="exportJsonBtn">
                                 <i class="fa-solid fa-code me-2"></i> JSON
                             </button>
                         </div>
@@ -282,49 +288,49 @@
                 <div id="printableStudioBible">
 
                     <!-- Result Navigation Tabs -->
-                    <ul class="nav nav-pills custom-tabs mb-4 gap-2 border-bottom border-secondary border-opacity-25 pb-3" id="bibleTabs" role="tablist">
+                    <ul class="nav nav-pills custom-tabs mb-3 gap-2 border-bottom pb-3" id="bibleTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active font-mono" id="tab-overview-btn" data-bs-toggle="pill" data-bs-target="#tab-overview" type="button">
+                            <button class="nav-link active font-mono text-xs" id="tab-overview-btn" data-bs-toggle="pill" data-bs-target="#tab-overview" type="button">
                                 🎬 Executive Pitch
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link font-mono" id="tab-scenes-btn" data-bs-toggle="pill" data-bs-target="#tab-scenes" type="button">
+                            <button class="nav-link font-mono text-xs" id="tab-scenes-btn" data-bs-toggle="pill" data-bs-target="#tab-scenes" type="button">
                                 📄 Scene Breakdown
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link font-mono" id="tab-budget-btn" data-bs-toggle="pill" data-bs-target="#tab-budget" type="button">
-                                💰 Budget & Logistics
+                            <button class="nav-link font-mono text-xs" id="tab-budget-btn" data-bs-toggle="pill" data-bs-target="#tab-budget" type="button">
+                                💰 Budget &amp; Logistics
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link font-mono" id="tab-storyboard-btn" data-bs-toggle="pill" data-bs-target="#tab-storyboard" type="button">
-                                🎨 Storyboards & Lens
+                            <button class="nav-link font-mono text-xs" id="tab-storyboard-btn" data-bs-toggle="pill" data-bs-target="#tab-storyboard" type="button">
+                                🎨 Storyboards &amp; Lens
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link font-mono" id="tab-casting-btn" data-bs-toggle="pill" data-bs-target="#tab-casting" type="button">
+                            <button class="nav-link font-mono text-xs" id="tab-casting-btn" data-bs-toggle="pill" data-bs-target="#tab-casting" type="button">
                                 🎭 AI Casting Director
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link font-mono" id="tab-dna-btn" data-bs-toggle="pill" data-bs-target="#tab-dna" type="button">
-                                🧬 Script DNA & Arc
+                            <button class="nav-link font-mono text-xs" id="tab-dna-btn" data-bs-toggle="pill" data-bs-target="#tab-dna" type="button">
+                                🧬 Script DNA &amp; Arc
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link font-mono" id="tab-debate-btn" data-bs-toggle="pill" data-bs-target="#tab-debate" type="button">
+                            <button class="nav-link font-mono text-xs" id="tab-debate-btn" data-bs-toggle="pill" data-bs-target="#tab-debate" type="button">
                                 ⚔️ War Room Debate
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link font-mono" id="tab-risks-btn" data-bs-toggle="pill" data-bs-target="#tab-risks" type="button">
+                            <button class="nav-link font-mono text-xs" id="tab-risks-btn" data-bs-toggle="pill" data-bs-target="#tab-risks" type="button">
                                 ⚠️ Risk Matrix
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link font-mono" id="tab-grafana-btn" data-bs-toggle="pill" data-bs-target="#tab-grafana" type="button">
+                            <button class="nav-link font-mono text-xs" id="tab-grafana-btn" data-bs-toggle="pill" data-bs-target="#tab-grafana" type="button">
                                 📊 Grafana Observability
                             </button>
                         </li>
@@ -338,71 +344,75 @@
                             <!-- Metrics Cards -->
                             <div class="row g-3 mb-4">
                                 <div class="col-md-3">
-                                    <div class="metric-card p-3 rounded-4 bg-card border-secondary border-opacity-25">
-                                        <div class="text-xs text-muted font-mono mb-1">TOTAL SCENES</div>
-                                        <div class="fs-2 fw-extrabold text-cyan font-mono" id="metricScenes">0</div>
-                                        <div class="text-xs text-muted" id="metricPages">Est. 0.0 script pages</div>
+                                    <div class="metric-card p-3 rounded-3 bg-card border">
+                                        <div class="text-xxs text-secondary-themed font-mono mb-1">TOTAL SCENES</div>
+                                        <div class="fs-3 fw-bold text-cyan font-mono" id="metricScenes">0</div>
+                                        <div class="text-xxs text-secondary-themed" id="metricPages">Est. 0.0 script pages</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="metric-card p-3 rounded-4 bg-card border-secondary border-opacity-25">
-                                        <div class="text-xs text-muted font-mono mb-1">ESTIMATED BUDGET</div>
-                                        <div class="fs-2 fw-extrabold text-warning font-mono" id="metricBudget">$0</div>
-                                        <div class="text-xs text-muted" id="metricTier">Tier</div>
+                                    <div class="metric-card p-3 rounded-3 bg-card border">
+                                        <div class="text-xxs text-secondary-themed font-mono mb-1">ESTIMATED BUDGET</div>
+                                        <div class="fs-3 fw-bold text-warning font-mono" id="metricBudget">$0</div>
+                                        <div class="text-xxs text-secondary-themed" id="metricTier">Tier</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="metric-card p-3 rounded-4 bg-card border-secondary border-opacity-25">
-                                        <div class="text-xs text-muted font-mono mb-1">CREW ALLOCATION</div>
-                                        <div class="fs-2 fw-extrabold text-info font-mono" id="metricCrew">0</div>
-                                        <div class="text-xs text-muted">Headcount on set</div>
+                                    <div class="metric-card p-3 rounded-3 bg-card border">
+                                        <div class="text-xxs text-secondary-themed font-mono mb-1">CREW ALLOCATION</div>
+                                        <div class="fs-3 fw-bold text-info font-mono" id="metricCrew">0</div>
+                                        <div class="text-xxs text-secondary-themed">Headcount on set</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="metric-card p-3 rounded-4 bg-card border-secondary border-opacity-25">
-                                        <div class="text-xs text-muted font-mono mb-1">RISK RATING</div>
-                                        <div class="fs-2 fw-extrabold text-danger font-mono" id="metricRisk">MODERATE</div>
-                                        <div class="text-xs text-muted" id="metricRiskCount">0 risk factors</div>
+                                    <div class="metric-card p-3 rounded-3 bg-card border">
+                                        <div class="text-xxs text-secondary-themed font-mono mb-1">COMPLIANCE / RISK</div>
+                                        <div class="fs-3 fw-bold text-success font-mono" id="metricRisk">STABLE</div>
+                                        <div class="text-xxs text-secondary-themed" id="metricRiskCount">0 risk mitigation flags</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Logline & Synopsis Banner -->
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4 mb-4">
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-                                    <h4 class="text-cyan font-mono mb-0"><i class="fa-solid fa-quote-left me-2"></i> Executive Pitch Logline</h4>
-                                    <button class="btn btn-outline-warning btn-sm font-mono px-3 py-1" id="btnAuditionTrailerVoice" onclick="playTrailerVoiceover()">
+                            <!-- Executive Pitch Deck Content -->
+                            <div class="card bg-card border rounded-3 p-4 mb-4">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 border-bottom pb-3">
+                                    <div>
+                                        <h5 class="text-cyan font-mono mb-1"><i class="fa-solid fa-bullhorn me-2"></i> Theatrical Logline &amp; Concept Pitch</h5>
+                                        <p class="text-secondary-themed text-xs mb-0">Engineered by the Executive Pitch Agent for Studio Producers &amp; Buyers.</p>
+                                    </div>
+                                    <button class="btn btn-outline-cyan btn-sm font-mono text-xs" id="btnAuditionTrailerVoice" onclick="playTrailerVoiceover()">
                                         <i class="fa-solid fa-volume-high me-1"></i> Audition Trailer Voiceover
                                     </button>
                                 </div>
-                                <blockquote class="blockquote text-light fs-5 fw-medium border-start border-cyan border-3 ps-3 mb-4" id="overviewLogline">
-                                    "Logline content..."
-                                </blockquote>
 
+                                <div class="p-3 bg-surface-elevated rounded-3 border mb-3">
+                                    <div class="text-xxs text-secondary-themed font-mono mb-1">THE HOOK / LOGLINE</div>
+                                    <h6 class="text-primary-themed fst-italic mb-0" id="overviewLogline">Logline formulation in progress...</h6>
+                                </div>
 
                                 <div class="row g-4">
                                     <div class="col-md-7">
-                                        <h5 class="text-white font-mono mb-2">Narrative Synopsis</h5>
-                                        <p class="text-muted leading-relaxed" id="overviewSynopsis">Synopsis content...</p>
+                                        <h6 class="text-primary-themed font-mono mb-2"><i class="fa-solid fa-film me-2 text-cyan"></i> Narrative Synopsis</h6>
+                                        <p class="text-secondary-themed text-sm leading-relaxed mb-3" id="overviewSynopsis">Synopsis content...</p>
 
-                                        <h5 class="text-white font-mono mb-2 mt-4">Producer Executive Summary</h5>
-                                        <p class="text-muted leading-relaxed" id="overviewExecutiveSummary">Executive summary content...</p>
+                                        <h6 class="text-primary-themed font-mono mb-2"><i class="fa-solid fa-chart-line me-2 text-warning"></i> Executive Summary &amp; Studio Viability</h6>
+                                        <p class="text-secondary-themed text-sm leading-relaxed" id="overviewExecutiveSummary">Executive summary content...</p>
                                     </div>
                                     <div class="col-md-5">
-                                        <div class="bg-dark p-3 rounded-3 border border-secondary border-opacity-25 d-flex flex-column gap-3">
+                                        <div class="bg-surface-elevated p-3 rounded-3 border d-flex flex-column gap-3">
                                             <div>
-                                                <div class="text-xs text-muted font-mono">BOX OFFICE COMPS</div>
+                                                <div class="text-xxs text-secondary-themed font-mono">BOX OFFICE COMPS</div>
                                                 <div class="d-flex flex-wrap gap-2 mt-1" id="overviewCompsBadges">
                                                     <!-- Comps Badges -->
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="text-xs text-muted font-mono">TARGET DEMOGRAPHIC</div>
-                                                <div class="text-light text-sm mt-1" id="overviewDemographic">Demographic...</div>
+                                                <div class="text-xxs text-secondary-themed font-mono">TARGET DEMOGRAPHIC</div>
+                                                <div class="text-primary-themed text-sm mt-1" id="overviewDemographic">Demographic...</div>
                                             </div>
                                             <div>
-                                                <div class="text-xs text-muted font-mono">MARKET POSITIONING</div>
-                                                <div class="text-light text-sm mt-1" id="overviewPositioning">Positioning...</div>
+                                                <div class="text-xxs text-secondary-themed font-mono">MARKET POSITIONING</div>
+                                                <div class="text-primary-themed text-sm mt-1" id="overviewPositioning">Positioning...</div>
                                             </div>
                                         </div>
                                     </div>
@@ -412,10 +422,10 @@
 
                         <!-- TAB 2: SCENE BREAKDOWN -->
                         <div class="tab-pane fade" id="tab-scenes" role="tabpanel">
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4">
+                            <div class="card bg-card border rounded-3 p-4">
                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <h4 class="text-cyan font-mono mb-0"><i class="fa-solid fa-list-check me-2"></i> Scene-by-Scene Breakdown</h4>
-                                    <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary w-auto font-mono" id="sceneSearchInput" placeholder="Filter scenes or props...">
+                                    <h5 class="text-cyan font-mono mb-0"><i class="fa-solid fa-list-check me-2"></i> Scene-by-Scene Breakdown</h5>
+                                    <input type="text" class="form-control form-control-sm w-auto font-mono text-xs" id="sceneSearchInput" placeholder="Filter scenes or props...">
                                 </div>
 
                                 <div class="row g-3" id="scenesContainer">
@@ -428,16 +438,16 @@
                         <div class="tab-pane fade" id="tab-budget" role="tabpanel">
                             <div class="row g-4 mb-4">
                                 <div class="col-lg-6">
-                                    <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4 h-100">
-                                        <h4 class="text-warning font-mono mb-3"><i class="fa-solid fa-chart-pie me-2"></i> Budget Allocation Share</h4>
+                                    <div class="card bg-card border rounded-3 p-4 h-100">
+                                        <h5 class="text-warning font-mono mb-3"><i class="fa-solid fa-chart-pie me-2"></i> Budget Allocation Share</h5>
                                         <div class="chart-container position-relative" style="height: 280px;">
                                             <canvas id="budgetChart"></canvas>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4 h-100">
-                                        <h4 class="text-cyan font-mono mb-3"><i class="fa-solid fa-chart-column me-2"></i> Category Cost Comparison (USD)</h4>
+                                    <div class="card bg-card border rounded-3 p-4 h-100">
+                                        <h5 class="text-cyan font-mono mb-3"><i class="fa-solid fa-chart-column me-2"></i> Category Cost Comparison (USD)</h5>
                                         <div class="chart-container position-relative" style="height: 280px;">
                                             <canvas id="budgetCategoryBarChart"></canvas>
                                         </div>
@@ -445,8 +455,8 @@
                                 </div>
                             </div>
 
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4 mb-4">
-                                <h5 class="text-white font-mono mb-3"><i class="fa-solid fa-bars-progress me-2 text-cyan"></i> Cost Allocation Progress Meters</h5>
+                            <div class="card bg-card border rounded-3 p-4 mb-4">
+                                <h6 class="text-primary-themed font-mono mb-3"><i class="fa-solid fa-bars-progress me-2 text-cyan"></i> Cost Allocation Progress Meters</h6>
                                 <div class="row g-3" id="budgetProgressBarsContainer">
                                     <!-- Progress bars injected by JS -->
                                 </div>
@@ -454,8 +464,8 @@
 
                             <div class="row g-4 mb-4">
                                 <div class="col-12">
-                                    <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4">
-                                        <h4 class="text-info font-mono mb-3"><i class="fa-solid fa-cubes-stacked me-2"></i> Production Logistics Summary</h4>
+                                    <div class="card bg-card border rounded-3 p-4">
+                                        <h5 class="text-info font-mono mb-3"><i class="fa-solid fa-cubes-stacked me-2"></i> Production Logistics Summary</h5>
                                         <div class="d-flex flex-column gap-3" id="logisticsSummaryList">
                                             <!-- Logistics Details Injected by JS -->
                                         </div>
@@ -463,12 +473,12 @@
                                 </div>
                             </div>
 
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4">
-                                <h5 class="text-white font-mono mb-3"><i class="fa-solid fa-table me-2"></i> Line-Item Production Budget</h5>
+                            <div class="card bg-card border rounded-3 p-4">
+                                <h6 class="text-primary-themed font-mono mb-3"><i class="fa-solid fa-table me-2"></i> Line-Item Production Budget</h6>
                                 <div class="table-responsive">
-                                    <table class="table table-dark table-hover border-secondary">
+                                    <table class="table table-hover border">
                                         <thead>
-                                            <tr class="font-mono text-cyan">
+                                            <tr class="font-mono text-cyan text-xs">
                                                 <th>Category</th>
                                                 <th>Line Description</th>
                                                 <th>Cost (USD)</th>
@@ -485,288 +495,277 @@
 
                         <!-- TAB 4: VISUAL STORYBOARDS -->
                         <div class="tab-pane fade" id="tab-storyboard" role="tabpanel">
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4 mb-4">
-                                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3 border-bottom border-secondary border-opacity-25 pb-3">
+                            <div class="card bg-card border rounded-3 p-4 mb-4">
+                                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3 border-bottom pb-3">
                                     <div>
-                                        <h4 class="text-cyan font-mono mb-1"><i class="fa-solid fa-camera-retro me-2"></i> Cinematography & Visual Direction</h4>
-                                        <p class="text-muted text-sm mb-0" id="storyboardStyleDesc">Aesthetic style reference...</p>
+                                        <h5 class="text-cyan font-mono mb-1"><i class="fa-solid fa-camera-retro me-2"></i> Cinematography &amp; Visual Direction</h5>
+                                        <p class="text-secondary-themed text-xs mb-0" id="storyboardStyleDesc">Aesthetic style reference...</p>
                                     </div>
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="text-xs text-muted font-mono me-2">COLOR PALETTE:</span>
+                                        <span class="text-xxs text-secondary-themed font-mono me-2">COLOR PALETTE:</span>
                                         <div class="d-flex gap-1" id="storyboardColorPalette">
                                             <!-- Swatches -->
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Director's Interactive Lens & Aspect Ratio Controls -->
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 bg-dark rounded-3 border border-secondary border-opacity-25 mb-4 font-mono text-xs">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="text-cyan"><i class="fa-solid fa-expand me-1"></i> Frame Ratio:</span>
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button type="button" class="btn btn-outline-cyan active btn-ratio" data-ratio="2.39" onclick="setStoryboardRatio('2.39')">2.39:1 Scope</button>
-                                            <button type="button" class="btn btn-outline-cyan btn-ratio" data-ratio="1.85" onclick="setStoryboardRatio('1.85')">1.85:1 Flat</button>
-                                            <button type="button" class="btn btn-outline-cyan btn-ratio" data-ratio="1.43" onclick="setStoryboardRatio('1.43')">1.43:1 IMAX</button>
-                                            <button type="button" class="btn btn-outline-cyan btn-ratio" data-ratio="1.33" onclick="setStoryboardRatio('1.33')">4:3 Academy</button>
+                                <!-- Director's Interactive Lens & Scope Controller -->
+                                <div class="p-3 bg-surface-elevated rounded-3 border mb-4">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-md-6">
+                                            <span class="text-xxs text-secondary-themed font-mono d-block mb-1">DIRECTOR'S ASPECT RATIO:</span>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="button" class="btn btn-outline-secondary btn-ratio active font-mono text-xxs" data-ratio="2.39" onclick="setStoryboardRatio('2.39')">2.39:1 Scope</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-ratio font-mono text-xxs" data-ratio="1.85" onclick="setStoryboardRatio('1.85')">1.85:1 Flat</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-ratio font-mono text-xxs" data-ratio="1.43" onclick="setStoryboardRatio('1.43')">1.43:1 IMAX</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-ratio font-mono text-xxs" data-ratio="1.33" onclick="setStoryboardRatio('1.33')">4:3 Academy</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="text-amber"><i class="fa-solid fa-filter me-1"></i> Lens Grade:</span>
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button type="button" class="btn btn-outline-secondary active btn-filter" data-filter="none" onclick="setLensGrade('none')">Natural</button>
-                                            <button type="button" class="btn btn-outline-secondary btn-filter" data-filter="teal-orange" onclick="setLensGrade('teal-orange')">Teal & Orange</button>
-                                            <button type="button" class="btn btn-outline-secondary btn-filter" data-filter="technicolor" onclick="setLensGrade('technicolor')">Technicolor</button>
-                                            <button type="button" class="btn btn-outline-secondary btn-filter" data-filter="bleach-bypass" onclick="setLensGrade('bleach-bypass')">Bleach Bypass</button>
-                                            <button type="button" class="btn btn-outline-secondary btn-filter" data-filter="noir" onclick="setLensGrade('noir')">Film Noir</button>
+                                        <div class="col-md-6 text-md-end">
+                                            <span class="text-xxs text-secondary-themed font-mono d-block mb-1">CINEMATIC COLOR GRADE:</span>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="button" class="btn btn-outline-secondary btn-filter active font-mono text-xxs" data-filter="none" onclick="setLensGrade('none')">Standard</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-filter font-mono text-xxs" data-filter="teal-orange" onclick="setLensGrade('teal-orange')">Teal &amp; Orange</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-filter font-mono text-xxs" data-filter="noir" onclick="setLensGrade('noir')">Monochrome</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-filter font-mono text-xxs" data-filter="bleach-bypass" onclick="setLensGrade('bleach-bypass')">Bleach Bypass</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
+                                <!-- Storyboard Cards Grid -->
                                 <div class="row g-4" id="storyboardGrid">
-                                    <!-- Storyboard Shot Cards Injected by JS -->
+                                    <!-- Storyboard shots injected by JS -->
                                 </div>
                             </div>
                         </div>
 
-                        <!-- TAB 4: AI CASTING DIRECTOR & TALENT ATTACHMENT -->
+                        <!-- TAB 5: AI CASTING DIRECTOR -->
                         <div class="tab-pane fade" id="tab-casting" role="tabpanel">
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4 mb-4">
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+                            <div class="card bg-card border rounded-3 p-4 mb-4">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 border-bottom pb-3">
                                     <div>
-                                        <h4 class="text-info font-mono mb-1"><i class="fa-solid fa-users-viewfinder me-2"></i> AI Casting Director & Star Talent Attachments</h4>
-                                        <p class="text-muted text-sm mb-0">Autonomous talent scouting, character archetype matching, box office bankability forecasting, and talent quotes.</p>
+                                        <h5 class="text-cyan font-mono mb-1"><i class="fa-solid fa-masks-theater me-2"></i> AI Casting Director &amp; Star Attachments</h5>
+                                        <p class="text-secondary-themed text-xs mb-0">Autonomous talent attachment analysis with bankability scoring and fee estimations.</p>
                                     </div>
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-cyan text-dark font-mono px-3 py-2 fw-bold" id="castingStarPowerBadge">
-                                            A-List Marquee
-                                        </span>
-                                        <span class="badge bg-warning-subtle text-warning border border-warning border-opacity-50 font-mono px-3 py-2" id="castingBudgetBadge">
-                                            Est. Cast Budget: $0
-                                        </span>
+                                        <span class="badge bg-secondary-subtle text-cyan border border-cyan border-opacity-25 font-mono text-xs" id="castingStarPowerBadge">A-List Marquee</span>
+                                        <span class="badge bg-secondary-subtle text-warning border border-warning border-opacity-25 font-mono text-xs" id="castingBudgetBadge">Est. Cast Budget</span>
                                     </div>
                                 </div>
 
-                                <!-- Ensemble Strategy Overview -->
-                                <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 mb-4">
-                                    <div class="text-xs text-cyan font-mono mb-1"><i class="fa-solid fa-theater-masks me-1"></i> ENSEMBLE TONAL STRATEGY & DYNAMICS</div>
-                                    <p class="text-light text-sm mb-0" id="castingEnsembleOverview">Awaiting casting analysis...</p>
+                                <div class="p-3 bg-surface-elevated rounded-3 border mb-4">
+                                    <div class="text-xxs text-secondary-themed font-mono mb-1">ENSEMBLE CASTING STRATEGY &amp; CHEMISTRY VERDICT</div>
+                                    <p class="text-primary-themed text-sm mb-0" id="castingEnsembleOverview">Ensemble strategy formulation in progress...</p>
                                 </div>
 
                                 <!-- Character Casting Cards Grid -->
-                                <h5 class="text-white font-mono mb-3"><i class="fa-solid fa-address-card me-2 text-cyan"></i> Principal Cast Attachments & Comp Analysis</h5>
                                 <div class="row g-4" id="castingCardsContainer">
-                                    <!-- Dynamic casting cards injected by JS -->
+                                    <!-- Casting cards injected by JS -->
                                 </div>
                             </div>
                         </div>
 
-                        <!-- TAB 5: SCRIPT DNA & EMOTIONAL ARC ARCHITECTURE -->
+                        <!-- TAB 6: SCRIPT DNA & NARRATIVE ARC -->
                         <div class="tab-pane fade" id="tab-dna" role="tabpanel">
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4 mb-4">
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+                            <div class="card bg-card border rounded-3 p-4 mb-4">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 border-bottom pb-3">
                                     <div>
-                                        <h4 class="text-cyan font-mono mb-1"><i class="fa-solid fa-dna me-2"></i> Script DNA & Dramatic Arc Architecture</h4>
-                                        <p class="text-muted text-sm mb-0">Autonomous dramatic tension modeling, emotional velocity fingerprinting, and 3-act pacing cadence.</p>
+                                        <h5 class="text-cyan font-mono mb-1"><i class="fa-solid fa-dna me-2"></i> Script DNA &amp; Narrative Arc Architecture</h5>
+                                        <p class="text-secondary-themed text-xs mb-0">Algorithmic dramatic tension curves, pacing velocity (BPM), and dialogue density analysis.</p>
                                     </div>
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-cyan text-dark font-mono px-3 py-2 fw-bold" id="dnaArcBadge">
-                                            Rising Crescendo
-                                        </span>
-                                        <span class="badge bg-info-subtle text-info border border-info border-opacity-50 font-mono px-3 py-2" id="dnaPacingBadge">
-                                            Propulsive Pacing
-                                        </span>
+                                        <span class="badge bg-secondary-subtle text-cyan border border-cyan border-opacity-25 font-mono text-xs" id="dnaArcBadge">Arc Shape</span>
+                                        <span class="badge bg-secondary-subtle text-warning border border-warning border-opacity-25 font-mono text-xs" id="dnaPacingBadge">Pacing Verdict</span>
                                     </div>
                                 </div>
 
-                                <!-- Emotional Fingerprint Quote Banner -->
-                                <div class="p-3 bg-dark rounded-3 border border-cyan border-opacity-30 mb-4 position-relative overflow-hidden">
-                                    <div class="d-flex align-items-center gap-2 text-xs text-cyan font-mono mb-1">
-                                        <i class="fa-solid fa-fingerprint"></i> SCRIPT EMOTIONAL FINGERPRINT
-                                    </div>
-                                    <p class="text-white fs-6 fst-italic mb-0" id="dnaFingerprintQuote">"Analyzing screenplay emotional trajectory..."</p>
-                                </div>
-
-                                <!-- Key DNA Metrics Row -->
+                                <!-- Narrative Pulse Overview -->
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-3">
-                                        <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 text-center">
-                                            <div class="text-xs text-muted font-mono mb-1">AVG TENSION SCORE</div>
-                                            <div class="fs-2 fw-extrabold text-cyan font-mono" id="dnaAvgTension">0.0 / 10</div>
-                                            <div class="text-xs text-muted">Dramatic Intensity Index</div>
+                                        <div class="p-3 bg-surface-elevated rounded-3 border text-center">
+                                            <div class="text-xxs text-secondary-themed font-mono mb-1">AVERAGE TENSION</div>
+                                            <div class="fs-4 fw-bold text-cyan font-mono" id="dnaAvgTension">0.0 / 10</div>
+                                            <div class="text-xxs text-secondary-themed">Across entire screenplay</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 text-center">
-                                            <div class="text-xs text-muted font-mono mb-1">PEAK DRAMATIC APEX</div>
-                                            <div class="fs-2 fw-extrabold text-warning font-mono" id="dnaPeakScene">Scene #1</div>
-                                            <div class="text-xs text-warning">Maximum Conflict Point</div>
+                                        <div class="p-3 bg-surface-elevated rounded-3 border text-center">
+                                            <div class="text-xxs text-secondary-themed font-mono mb-1">CLIMAX PEAK SCENE</div>
+                                            <div class="fs-4 fw-bold text-warning font-mono" id="dnaPeakScene">Scene #1</div>
+                                            <div class="text-xxs text-secondary-themed">Narrative apex point</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 text-center">
-                                            <div class="text-xs text-muted font-mono mb-1">DIALOGUE vs ACTION</div>
-                                            <div class="fs-2 fw-extrabold text-info font-mono" id="dnaDialogueRatio">50% / 50%</div>
-                                            <div class="text-xs text-muted">Verbal Density Balance</div>
+                                        <div class="p-3 bg-surface-elevated rounded-3 border text-center">
+                                            <div class="text-xxs text-secondary-themed font-mono mb-1">DIALOGUE / ACTION</div>
+                                            <div class="fs-4 fw-bold text-info font-mono" id="dnaDialogueRatio">50% / 50%</div>
+                                            <div class="text-xxs text-secondary-themed">Acoustic balance ratio</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 text-center">
-                                            <div class="text-xs text-muted font-mono mb-1">NARRATIVE RHYTHM</div>
-                                            <div class="fs-2 fw-extrabold text-success font-mono" id="dnaBpmApex">120 BPM</div>
-                                            <div class="text-xs text-success">Peak Pacing Velocity</div>
+                                        <div class="p-3 bg-surface-elevated rounded-3 border text-center">
+                                            <div class="text-xxs text-secondary-themed font-mono mb-1">PACING VELOCITY</div>
+                                            <div class="fs-4 fw-bold text-success font-mono" id="dnaBpmApex">120 BPM</div>
+                                            <div class="text-xxs text-secondary-themed">Maximum pulse rate</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Chart.js Dual-Axis Arc & BPM Canvas -->
-                                <div class="p-4 bg-dark rounded-4 border border-secondary border-opacity-25 mb-4">
-                                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-                                        <h5 class="text-white font-mono mb-0"><i class="fa-solid fa-chart-area me-2 text-cyan"></i> Dramatic Tension Curve & Pacing Velocity (BPM)</h5>
-                                        <div class="d-flex align-items-center gap-3 text-xs font-mono">
-                                            <span class="text-cyan"><span class="badge bg-cyan rounded-circle p-1 me-1"> </span> Tension (0-10)</span>
-                                            <span class="text-warning"><span class="badge bg-warning rounded-circle p-1 me-1"> </span> Pacing (BPM)</span>
+                                <!-- Emotional Fingerprint Quote -->
+                                <div class="p-3 bg-surface-elevated rounded-3 border mb-4 text-center">
+                                    <span class="text-xxs text-secondary-themed font-mono d-block mb-1">EMOTIONAL FINGERPRINT VERDICT</span>
+                                    <h6 class="text-cyan fst-italic mb-0" id="dnaFingerprintQuote">"A high-octane narrative journey."</h6>
+                                </div>
+
+                                <!-- Dual-Axis Chart.js Arc Canvas -->
+                                <div class="p-3 bg-surface-elevated rounded-3 border mb-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="text-xs font-mono fw-bold text-primary-themed"><i class="fa-solid fa-chart-line text-cyan me-1"></i> DRAMATIC TENSION &amp; NARRATIVE BPM CURVE</span>
+                                        <div class="d-flex align-items-center gap-3 text-xxs font-mono">
+                                            <span class="text-cyan"><i class="fa-solid fa-circle me-1"></i> Dramatic Tension (0-10)</span>
+                                            <span class="text-warning"><i class="fa-solid fa-circle me-1"></i> Pacing Velocity (BPM)</span>
                                         </div>
                                     </div>
-                                    <div style="height: 290px; position: relative;">
+                                    <div class="chart-container position-relative" style="height: 260px;">
                                         <canvas id="dnaTensionChart"></canvas>
                                     </div>
                                 </div>
 
                                 <!-- Scene Emotional Chromatics Grid -->
-                                <h5 class="text-white font-mono mb-3"><i class="fa-solid fa-layer-group me-2 text-cyan"></i> Scene Emotional Chromatics & Narrative BPM</h5>
+                                <h6 class="text-primary-themed font-mono mb-3"><i class="fa-solid fa-layer-group me-2 text-cyan"></i> Scene Emotional Chromatics &amp; Narrative BPM</h6>
                                 <div class="row g-3 mb-4" id="dnaSceneCardsContainer">
                                     <!-- Injected by renderScriptDNA JS -->
                                 </div>
 
                                 <!-- 3-Act Structure Analysis Card -->
-                                <div class="p-4 bg-dark rounded-4 border border-secondary border-opacity-50">
-                                    <div class="text-xs text-cyan font-mono fw-bold mb-2"><i class="fa-solid fa-diagram-project me-1"></i> THREE-ACT STRUCTURE & NARRATIVE CADENCE ANALYSIS</div>
-                                    <p class="text-light text-sm mb-0" id="dnaActStructureNotes">Structure notes awaiting analysis...</p>
+                                <div class="p-3 bg-surface-elevated rounded-3 border">
+                                    <div class="text-xxs text-cyan font-mono fw-bold mb-2"><i class="fa-solid fa-diagram-project me-1"></i> THREE-ACT STRUCTURE &amp; NARRATIVE CADENCE ANALYSIS</div>
+                                    <p class="text-primary-themed text-xs mb-0" id="dnaActStructureNotes">Structure notes awaiting analysis...</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- TAB 6: STUDIO GREENLIGHT WAR ROOM DEBATE -->
+                        <!-- TAB 7: STUDIO GREENLIGHT WAR ROOM DEBATE -->
                         <div class="tab-pane fade" id="tab-debate" role="tabpanel">
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4 mb-4">
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+                            <div class="card bg-card border rounded-3 p-4 mb-4">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 border-bottom pb-3">
                                     <div>
-                                        <h4 class="text-warning font-mono mb-1"><i class="fa-solid fa-handshake-simple me-2"></i> Studio Greenlight War Room</h4>
-                                        <p class="text-muted text-sm mb-0">Autonomous executive debate: Visionary Director vs Studio Line Producer (CFO).</p>
+                                        <h5 class="text-warning font-mono mb-1"><i class="fa-solid fa-handshake-simple me-2"></i> Studio Greenlight War Room</h5>
+                                        <p class="text-secondary-themed text-xs mb-0">Autonomous executive debate: Visionary Director vs Studio Line Producer (CFO).</p>
                                     </div>
-                                    <span class="badge bg-success-subtle text-success border border-success border-opacity-50 font-mono px-3 py-2 fs-6" id="debateGreenlightBadge">
+                                    <span class="badge bg-success-subtle text-success border border-success border-opacity-50 font-mono px-3 py-2 text-xs" id="debateGreenlightBadge">
                                         GREENLIT
                                     </span>
                                 </div>
 
                                 <!-- Central Controversy Banner -->
-                                <div class="p-3 bg-dark rounded-3 border border-warning border-opacity-50 mb-4">
-                                    <div class="text-xs text-warning font-mono mb-1"><i class="fa-solid fa-fire me-1"></i> DISPUTED PRODUCTION TOPIC</div>
-                                    <h5 class="text-white font-mono mb-0" id="debateTopic">Awaiting debate topic...</h5>
+                                <div class="p-3 bg-surface-elevated rounded-3 border mb-4">
+                                    <div class="text-xxs text-warning font-mono mb-1"><i class="fa-solid fa-fire me-1"></i> DISPUTED PRODUCTION TOPIC</div>
+                                    <h6 class="text-primary-themed font-mono mb-0" id="debateTopic">Awaiting debate topic...</h6>
                                 </div>
 
                                 <!-- Core Stances Comparison -->
                                 <div class="row g-4 mb-4">
                                     <div class="col-md-6">
-                                        <div class="p-3 bg-dark rounded-3 border border-cyan border-opacity-30 h-100">
+                                        <div class="p-3 bg-surface-elevated rounded-3 border h-100">
                                             <div class="d-flex align-items-center gap-2 mb-2">
-                                                <div class="avatar-circle bg-cyan text-dark fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">🎬</div>
-                                                <span class="fw-bold text-cyan font-mono">Visionary Director</span>
+                                                <div class="avatar-circle bg-cyan text-dark fw-bold rounded-circle d-flex align-items-center justify-content-center text-xs" style="width: 26px; height: 26px;">🎬</div>
+                                                <span class="fw-bold text-cyan font-mono text-xs">Visionary Director</span>
                                             </div>
-                                            <p class="text-muted text-sm mb-0" id="debateDirectorVision">Director perspective...</p>
+                                            <p class="text-secondary-themed text-xs mb-0" id="debateDirectorVision">Director perspective...</p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="p-3 bg-dark rounded-3 border border-danger border-opacity-30 h-100">
+                                        <div class="p-3 bg-surface-elevated rounded-3 border h-100">
                                             <div class="d-flex align-items-center gap-2 mb-2">
-                                                <div class="avatar-circle bg-danger text-white fw-bold rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">💼</div>
-                                                <span class="fw-bold text-danger font-mono">Line Producer / Studio CFO</span>
+                                                <div class="avatar-circle bg-danger text-white fw-bold rounded-circle d-flex align-items-center justify-content-center text-xs" style="width: 26px; height: 26px;">💼</div>
+                                                <span class="fw-bold text-danger font-mono text-xs">Line Producer / Studio CFO</span>
                                             </div>
-                                            <p class="text-muted text-sm mb-0" id="debateProducerConstraints">Producer constraints...</p>
+                                            <p class="text-secondary-themed text-xs mb-0" id="debateProducerConstraints">Producer constraints...</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Dialogue Exchanges Timeline -->
-                                <h5 class="text-white font-mono mb-3"><i class="fa-solid fa-comments me-2 text-cyan"></i> Live War Room Argument & Counter-Offers</h5>
+                                <h6 class="text-primary-themed font-mono mb-3"><i class="fa-solid fa-comments me-2 text-cyan"></i> Live War Room Argument &amp; Counter-Offers</h6>
                                 <div class="d-flex flex-column gap-3 mb-4" id="debateDialogueTimeline">
                                     <!-- Dialogue items injected by JS -->
                                 </div>
 
                                 <!-- Executive Consensus Banner -->
-                                <div class="p-4 bg-dark rounded-4 border border-success border-opacity-50">
-                                    <div class="text-xs text-success font-mono fw-bold mb-1"><i class="fa-solid fa-stamp me-1"></i> FINAL AUTONOMOUS EXECUTIVE CONSENSUS</div>
-                                    <p class="text-white fs-6 mb-0" id="debateConsensusAgreement">Awaiting consensus agreement...</p>
+                                <div class="p-3 bg-surface-elevated rounded-3 border border-success border-opacity-50">
+                                    <div class="text-xxs text-success font-mono fw-bold mb-1"><i class="fa-solid fa-stamp me-1"></i> FINAL AUTONOMOUS EXECUTIVE CONSENSUS</div>
+                                    <p class="text-primary-themed text-xs mb-0" id="debateConsensusAgreement">Awaiting consensus agreement...</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- TAB 7: SAFETY & RISK MATRIX -->
+                        <!-- TAB 8: SAFETY & RISK MATRIX -->
                         <div class="tab-pane fade" id="tab-risks" role="tabpanel">
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4">
-                                <h4 class="text-danger font-mono mb-3"><i class="fa-solid fa-shield-halved me-2"></i> Production Risk & Safety Assessment</h4>
+                            <div class="card bg-card border rounded-3 p-4">
+                                <h5 class="text-danger font-mono mb-3"><i class="fa-solid fa-shield-halved me-2"></i> Production Risk &amp; Safety Assessment</h5>
                                 <div class="row g-3" id="riskMatrixContainer">
                                     <!-- Risk Cards Injected by JS -->
                                 </div>
                             </div>
                         </div>
 
-                        <!-- TAB 8: GRAFANA OBSERVABILITY STUDIO -->
+                        <!-- TAB 9: GRAFANA OBSERVABILITY STUDIO -->
                         <div class="tab-pane fade" id="tab-grafana" role="tabpanel">
-                            <div class="card bg-card border-secondary border-opacity-25 rounded-4 p-4">
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+                            <div class="card bg-card border rounded-3 p-4">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 border-bottom pb-3">
                                     <div>
-                                        <h4 class="text-cyan font-mono mb-1"><i class="fa-solid fa-chart-line me-2"></i> Grafana Production Observability & Swarm Telemetry</h4>
-                                        <p class="text-muted text-sm mb-0">Production telemetry metrics tailored for the Grafana Partner Track & Agent Performance SLA.</p>
+                                        <h5 class="text-cyan font-mono mb-1"><i class="fa-solid fa-chart-line me-2"></i> Grafana Production Observability &amp; Swarm Telemetry</h5>
+                                        <p class="text-secondary-themed text-xs mb-0">Production telemetry metrics tailored for the Grafana Partner Track &amp; Agent Performance SLA.</p>
                                     </div>
-                                    <a href="/api/telemetry/grafana" target="_blank" class="btn btn-outline-cyan btn-sm font-mono">
+                                    <a href="/api/telemetry/grafana" target="_blank" class="btn btn-outline-cyan btn-sm font-mono text-xs">
                                         <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Prometheus/Grafana API Endpoint
                                     </a>
                                 </div>
 
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-3">
-                                        <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 text-center">
-                                            <div class="text-xs text-muted font-mono mb-1">SWARM LATENCY</div>
-                                            <div class="fs-2 fw-extrabold text-cyan font-mono" id="telemetryLatency">1,420 ms</div>
-                                            <div class="text-xs text-success">Within 2.0s SLA Target</div>
+                                        <div class="p-3 bg-surface-elevated rounded-3 border text-center">
+                                            <div class="text-xxs text-secondary-themed font-mono mb-1">SWARM LATENCY</div>
+                                            <div class="fs-4 fw-bold text-cyan font-mono" id="telemetryLatency">1,420 ms</div>
+                                            <div class="text-xxs text-success">Within 2.0s SLA Target</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 text-center">
-                                            <div class="text-xs text-muted font-mono mb-1">TOKENS ESTIMATED</div>
-                                            <div class="fs-2 fw-extrabold text-warning font-mono" id="telemetryTokens">3,850</div>
-                                            <div class="text-xs text-muted">Across 6 Sub-Agents</div>
+                                        <div class="p-3 bg-surface-elevated rounded-3 border text-center">
+                                            <div class="text-xxs text-secondary-themed font-mono mb-1">TOKENS ESTIMATED</div>
+                                            <div class="fs-4 fw-bold text-warning font-mono" id="telemetryTokens">3,850</div>
+                                            <div class="text-xxs text-secondary-themed">Across 6 Sub-Agents</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 text-center">
-                                            <div class="text-xs text-muted font-mono mb-1">BUDGET EFFICIENCY</div>
-                                            <div class="fs-2 fw-extrabold text-info font-mono" id="telemetryEfficiency">9.2 / 10</div>
-                                            <div class="text-xs text-info">High Financial Efficiency</div>
+                                        <div class="p-3 bg-surface-elevated rounded-3 border text-center">
+                                            <div class="text-xxs text-secondary-themed font-mono mb-1">BUDGET EFFICIENCY</div>
+                                            <div class="fs-4 fw-bold text-info font-mono" id="telemetryEfficiency">9.2 / 10</div>
+                                            <div class="text-xxs text-info">High Financial Efficiency</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25 text-center">
-                                            <div class="text-xs text-muted font-mono mb-1">SAG COMPLIANCE</div>
-                                            <div class="fs-2 fw-extrabold text-success font-mono" id="telemetrySafety">97.5%</div>
-                                            <div class="text-xs text-success">Safety Protocols Verified</div>
+                                        <div class="p-3 bg-surface-elevated rounded-3 border text-center">
+                                            <div class="text-xxs text-secondary-themed font-mono mb-1">SAG COMPLIANCE</div>
+                                            <div class="fs-4 fw-bold text-success font-mono" id="telemetrySafety">97.5%</div>
+                                            <div class="text-xxs text-success">Safety Protocols Verified</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="p-3 bg-dark rounded-3 border border-secondary border-opacity-25">
+                                <div class="p-3 bg-surface-elevated rounded-3 border">
                                     <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="text-xs text-muted font-mono"><i class="fa-solid fa-code me-1"></i> LIVE TELEMETRY EXPORT PAYLOAD (GRAFANA JSON SCHEMA)</span>
+                                        <span class="text-xxs text-secondary-themed font-mono"><i class="fa-solid fa-code me-1"></i> LIVE TELEMETRY EXPORT PAYLOAD (GRAFANA JSON SCHEMA)</span>
                                         <span class="badge bg-success-subtle text-success font-mono">200 OK</span>
                                     </div>
-                                    <pre class="bg-black p-3 rounded text-cyan font-mono text-xs mb-0" id="telemetryRawJson" style="max-height: 200px; overflow-y: auto;">
+                                    <pre class="bg-black p-3 rounded text-cyan font-mono text-xxs mb-0" id="telemetryRawJson" style="max-height: 200px; overflow-y: auto;">
 { "service": "cinemind-agent-orchestrator", "health": "OPTIMAL" }
                                     </pre>
                                 </div>
                             </div>
                         </div>
-
 
                     </div>
                 </div>
@@ -777,7 +776,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer mt-auto py-3 border-top border-secondary border-opacity-25 text-center text-muted font-mono text-xs">
+    <footer class="footer mt-auto py-3 border-top text-center text-secondary-themed font-mono text-xxs">
         <div class="container">
             <span>CineMind AI &copy; 2026 | Built for Agentic Cinema: The Blockbuster Hackathon | Powered by Google Gemini 2.5</span>
         </div>
@@ -787,6 +786,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom App JS -->
-    <script src="{{ url_for('static', filename='js/app.js') }}?v=3.0"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}?v=4.5"></script>
 </body>
 </html>
