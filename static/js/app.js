@@ -1300,44 +1300,79 @@ function copyPrompt(text, btn) {
    ========================================================================== */
 let trailerSpeechUtterance = null;
 
-function playTrailerVoiceover() {
+function playTrailerVoiceover(loglineText) {
     if (!('speechSynthesis' in window)) {
-        alert('Web Speech API is not supported in this browser.');
+        console.warn('Web Speech API is not supported in this browser.');
+        alert('Web Speech Synthesis is not supported in your browser.');
         return;
     }
 
-    if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-        const btn = document.getElementById('btnAuditionTrailerVoice');
-        if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-high me-1"></i> Audition Trailer Voiceover';
-        return;
+    // Cancel any ongoing audio before starting
+    window.speechSynthesis.cancel();
+
+    // Determine the narration text
+    let textToSpeak = (loglineText && typeof loglineText === 'string') ? loglineText.trim() : '';
+    if (!textToSpeak) {
+        const loglineEl = document.querySelector('.logline-text') || document.getElementById('overviewLogline');
+        if (loglineEl) {
+            textToSpeak = loglineEl.innerText.trim();
+        }
+    }
+    if (!textToSpeak && currentBibleData?.executive_pitch?.logline) {
+        textToSpeak = currentBibleData.executive_pitch.logline;
+    }
+    if (!textToSpeak || textToSpeak === 'Logline formulation in progress...') {
+        textToSpeak = 'In a world of corporate power and high stakes... CineMind AI presents the ultimate cinematic journey.';
     }
 
-    if (!currentBibleData) return;
+    const title = currentBibleData?.script_breakdown?.script_title || document.getElementById('resScriptTitle')?.innerText || 'CineMind Feature';
+    const narrationScript = `In a world of high stakes... CineMind presents: ${title}. ${textToSpeak}`;
 
-    const title = currentBibleData.script_breakdown?.script_title || 'Untitled';
-    const logline = currentBibleData.executive_pitch?.logline || 'A high-stakes cinematic journey.';
-    const comps = (currentBibleData.executive_pitch?.comparable_films || []).join(' and ');
+    const utterance = new SpeechSynthesisUtterance(narrationScript);
+    utterance.rate = 0.85; // Slower theatrical pacing
+    utterance.pitch = 0.75; // Deeper dramatic voice pitch
 
-    const narrationScript = `In a world of corporate power and high stakes... CineMind presents: ${title}. ${logline}. In the tradition of ${comps}... Approved for studio production!`;
-
-    trailerSpeechUtterance = new SpeechSynthesisUtterance(narrationScript);
-    trailerSpeechUtterance.rate = 0.86;
-    trailerSpeechUtterance.pitch = 0.75;
-
+    // Find a suitable English male/narrator voice from window.speechSynthesis.getVoices()
     const voices = window.speechSynthesis.getVoices();
-    const deepVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Male') || v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Daniel')));
-    if (deepVoice) trailerSpeechUtterance.voice = deepVoice;
+    const narratorVoice = voices.find(v => 
+        v.lang.startsWith('en') && 
+        (v.name.toLowerCase().includes('male') || 
+         v.name.toLowerCase().includes('david') || 
+         v.name.toLowerCase().includes('alex') || 
+         v.name.toLowerCase().includes('daniel') || 
+         v.name.toLowerCase().includes('george') || 
+         v.name.toLowerCase().includes('natural'))
+    ) || voices.find(v => v.lang.startsWith('en')) || voices[0];
 
-    const btn = document.getElementById('btnAuditionTrailerVoice');
-    if (btn) btn.innerHTML = '<i class="fa-solid fa-stop me-1 text-danger"></i> Stop Narration';
+    if (narratorVoice) {
+        utterance.voice = narratorVoice;
+    }
 
-    trailerSpeechUtterance.onend = () => {
-        if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-high me-1"></i> Audition Trailer Voiceover';
+    const btns = [document.getElementById('trailerVoBtn'), document.getElementById('btnAuditionTrailerVoice')].filter(Boolean);
+    btns.forEach(b => {
+        b.classList.add('btn-speaking');
+        b.innerHTML = '🎙️ Playing Narration...';
+    });
+
+    utterance.onend = () => {
+        btns.forEach(b => {
+            b.classList.remove('btn-speaking');
+            b.innerHTML = '🎙️ Audition Movie Trailer VO';
+        });
     };
 
-    trailerSpeechUtterance.onerror = () => {
-        if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-high me-1"></i> Audition Trailer Voiceover';
+    utterance.onerror = (err) => {
+        console.warn('Speech synthesis error:', err);
+        btns.forEach(b => {
+            b.classList.remove('btn-speaking');
+            b.innerHTML = '🎙️ Audition Movie Trailer VO';
+        });
     };
 
+    window.speechSynthesis.speak(utterance);
+    trailerSpeechUtterance = utterance;
 }
+
+// Ensure globally accessible
+window.playTrailerVoiceover = playTrailerVoiceover;
+

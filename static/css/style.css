@@ -69,10 +69,14 @@
     
     /* Backgrounds: Crisp enterprise slate canvas */
     --bg-app: #F6F8FA;
+    /* Backgrounds: Elegant Studio Off-White Canvas */
+    --bg-app: #FAF9F6;
     --card-bg: #FFFFFF;
     --bg-surface: #FFFFFF;
     --bg-surface-elevated: #F1F5F9;
     --bg-surface-subtle: #E2E8F0;
+    --bg-surface-elevated: #F3F2EE;
+    --bg-surface-subtle: #EAE9E4;
     --bg-input: #FFFFFF;
     
     /* Typography: High-Contrast Dark Charcoal in Light Mode */
@@ -86,6 +90,8 @@
     /* Crisp 1px Borders */
     --border: rgba(15, 23, 42, 0.14);
     --border-medium: rgba(15, 23, 42, 0.24);
+    --border: rgba(15, 23, 42, 0.12);
+    --border-medium: rgba(15, 23, 42, 0.22);
     --border-subtle: rgba(15, 23, 42, 0.08);
     
     /* Soft Cyan Brand Accent */
@@ -107,13 +113,19 @@
     /* Subtle Shadows */
     --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08);
     --shadow-md: 0 4px 12px 0 rgba(15, 23, 42, 0.12);
+    --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 4px 12px 0 rgba(15, 23, 42, 0.1);
 
     /* Navbar Backdrop */
     --navbar-bg: rgba(246, 248, 250, 0.94);
+    /* Navbar Backdrop: Warm Off-White Glass */
+    --navbar-bg: rgba(250, 249, 246, 0.94);
     
     /* Developer Telemetry Console */
     --console-bg: #F1F5F9;
     --console-border: rgba(15, 23, 42, 0.14);
+    --console-bg: #F3F2EE;
+    --console-border: rgba(15, 23, 42, 0.12);
     --console-text: #0F172A;
 
     /* Chart Elements */
@@ -587,6 +599,21 @@ body.app-body {
 .dropdown-item:hover {
     background: var(--bg-surface-elevated);
     color: var(--accent-cyan);
+}
+
+/* Compact Buttons & Voiceover State */
+.select-compact {
+    padding: 0.35rem 0.75rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 6px !important;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-speaking {
+    background-color: var(--accent-cyan-subtle) !important;
+    border-color: var(--accent-cyan) !important;
+    color: var(--accent-cyan) !important;
 }
 
 /* Scrollbars */

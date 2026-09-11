@@ -380,14 +380,14 @@
                                         <h5 class="text-cyan font-mono mb-1"><i class="fa-solid fa-bullhorn me-2"></i> Theatrical Logline &amp; Concept Pitch</h5>
                                         <p class="text-secondary-themed text-xs mb-0">Engineered by the Executive Pitch Agent for Studio Producers &amp; Buyers.</p>
                                     </div>
-                                    <button class="btn btn-outline-cyan btn-sm font-mono text-xs" id="btnAuditionTrailerVoice" onclick="playTrailerVoiceover()">
-                                        <i class="fa-solid fa-volume-high me-1"></i> Audition Trailer Voiceover
+                                    <button id="trailerVoBtn" onclick="playTrailerVoiceover(document.querySelector('.logline-text')?.innerText || '')" class="btn btn-outline-cyan btn-sm select-compact flex items-center d-flex align-items-center gap-2 font-mono text-xs" title="Audition Movie Trailer Voiceover">
+                                        🎙️ Audition Movie Trailer VO
                                     </button>
                                 </div>
 
                                 <div class="p-3 bg-surface-elevated rounded-3 border mb-3">
                                     <div class="text-xxs text-secondary-themed font-mono mb-1">THE HOOK / LOGLINE</div>
-                                    <h6 class="text-primary-themed fst-italic mb-0" id="overviewLogline">Logline formulation in progress...</h6>
+                                    <h6 class="text-primary-themed fst-italic mb-0 logline-text" id="overviewLogline">Logline formulation in progress...</h6>
                                 </div>
 
                                 <div class="row g-4">
